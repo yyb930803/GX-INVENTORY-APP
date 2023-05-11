@@ -49,7 +49,7 @@ const InventoryInit = (props) => {
         [{ text: '是(OK)', onPress: () => { } }],
         { cancelable: false },
       );
-    } else if (parseInt(maxGongWei) < parseInt(minGongWei)) {
+    } else if (Number(maxGongWei) < Number(minGongWei)) {
       Alert.alert(
         PROGRAM_NAME,
         '请输入确切的工位位数限制。',

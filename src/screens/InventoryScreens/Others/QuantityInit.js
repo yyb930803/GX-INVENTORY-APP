@@ -42,7 +42,7 @@ const QuantityInit = (props) => {
         [{ text: '是(OK)', onPress: () => { } }],
         { cancelable: false },
       );
-    } else if (parseInt(maxAmount) < parseInt(minAmount)) {
+    } else if (Number(maxAmount) < Number(minAmount)) {
       Alert.alert(
         PROGRAM_NAME,
         '请输入确切的数量位数限制。',

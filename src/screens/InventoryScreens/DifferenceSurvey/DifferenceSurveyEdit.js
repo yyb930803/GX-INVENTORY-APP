@@ -108,8 +108,8 @@ const DifferenceSurveyEdit = (props) => {
         PROGRAM_NAME,
         '输入的数量超出设置范围。 是否要输入超出设置范围的数量？',
         [
-          { text: '不(N)', onPress: () => setNewCount('') },
           { text: '是(Y)', onPress: () => editLayer() },
+          { text: '不(N)', onPress: () => setNewCount('') },
         ],
         { cancelable: false },
       );
@@ -124,7 +124,7 @@ const DifferenceSurveyEdit = (props) => {
 
     DB.transaction(tx => {
       tx.executeSql(`UPDATE ${differenceSurveyTb} SET count = ? , delete_flag = 0, scan_time = ?, upload = ? where record_id = ?`,
-        [parseInt(newCount), scantime, "new", flatListData[selectedRow].record_id],
+        [Number(newCount), scantime, "new", flatListData[selectedRow].record_id],
         (tx, results) => {
           getFlatListData();
           setEditOpen(false);

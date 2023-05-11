@@ -113,13 +113,13 @@ const DifferenceSurveyDelete = (props) => {
       PROGRAM_NAME,
       '你确定你要删除？',
       [
-        { text: '不(N)', onPress: () => { } },
         {
           text: '是(Y)', onPress: () => {
             const newDiffPhotos = diffPhotos.filter((item, i) => i !== index);
             dispatch(setDiffPhotos(newDiffPhotos));
           }
         },
+        { text: '不(N)', onPress: () => { } },
       ],
       { cancelable: false },
     );
@@ -211,7 +211,7 @@ const DifferenceSurveyDelete = (props) => {
             items={mistakeList}
             setItems={setMistakeList}
             searchable={true}
-            listMode='SCROLLVIEW'
+            listMode='MODAL'
           />
 
           <Text style={CStyles.TextStyle}>数量:</Text>

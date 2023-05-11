@@ -71,7 +71,7 @@ const DiffEndModal = (props) => {
 
                 <View style={{ alignItems: 'center' }}>
                     <Text style={{ textAlign: 'center', fontSize: 16, marginVertical: 30 }}>
-                        您想取消对该产品差异的调查吗？
+                        您要关闭此产品差异调查吗？
                     </Text>
                 </View>
 

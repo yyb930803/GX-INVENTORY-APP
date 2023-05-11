@@ -144,8 +144,8 @@ const InventoryReviewEditList = (props) => {
         PROGRAM_NAME,
         '输入的数量超出设置范围。 是否要输入超出设置范围的数量？',
         [
-          { text: '不(N)', onPress: () => setNewCount('') },
           { text: '是(Y)', onPress: () => editLayer() },
+          { text: '不(N)', onPress: () => setNewCount('') },
         ],
         { cancelable: false },
       );
@@ -161,7 +161,7 @@ const InventoryReviewEditList = (props) => {
     DB.transaction(tx => {
       tx.executeSql(
         `UPDATE ${inventoryReviewTb} SET count = ? , delete_flag = 0, upload = "new", scan_time = ?, mistakes_id = ?, mistakes_type = ? where record_id = ?`,
-        [parseInt(newCount), scantime, mistake, ownIssues, flatListData[selectedRow].record_id],
+        [Number(newCount), scantime, mistake, ownIssues, flatListData[selectedRow].record_id],
         (tx, results) => {
           getFlatListData();
           setEditOpen(false);
@@ -358,8 +358,8 @@ const InventoryReviewEditList = (props) => {
           setValue={setMistake}
           items={mistakeList}
           setItems={setMistakeList}
-          searchable={false}
-          listMode='SCROLLVIEW'
+          searchable={true}
+          listMode='MODAL'
         />
       </View>
     </>
@@ -462,8 +462,8 @@ const InventoryReviewEditList = (props) => {
             setValue={setRow}
             items={rowList}
             setItems={setRowList}
-            searchable={false}
-            listMode='SCROLLVIEW'
+            searchable={true}
+            listMode='MODAL'
           />
         </View>
 

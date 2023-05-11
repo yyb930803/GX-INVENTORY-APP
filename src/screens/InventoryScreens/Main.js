@@ -58,7 +58,8 @@ const Main = (props) => {
         '结束盘点的同时将清空所有基础商品数据，您是否还要结束当前项目？',
         [
           {
-            text: '确定', onPress: async () => {
+            text: '确定',
+            onPress: async () => {
               dispatch(setScreenLoading(true));
   
               const invNewRows = await getInvNewData(user.id);

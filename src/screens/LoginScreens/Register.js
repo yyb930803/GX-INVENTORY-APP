@@ -174,8 +174,8 @@ const Register = (props) => {
             setValue={setGender}
             items={genderList}
             setItems={setGenderList}
-            searchable={false}
-            listMode='SCROLLVIEW'
+            searchable={true}
+            listMode='MODAL'
           />
         </View>
 

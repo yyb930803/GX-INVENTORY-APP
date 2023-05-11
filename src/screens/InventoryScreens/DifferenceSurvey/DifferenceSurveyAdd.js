@@ -144,16 +144,15 @@ const DifferenceSurveyAdd = (props) => {
           '输入的数量超出设置范围。 是否要输入超出设置范围的数量？',
           [
             {
+              text: '是(Y)',
+              onPress: () => setQuantityClose(false),
+            },
+            {
               text: '不(N)',
               onPress: () => {
                 setCount('');
                 countRef.current.focus();
               },
-              style: 'cancel'
-            },
-            {
-              text: '是(Y)',
-              onPress: () => setQuantityClose(false),
             },
           ],
           { cancelable: false },
@@ -210,11 +209,6 @@ const DifferenceSurveyAdd = (props) => {
           '条形码不存在',
           [
             {
-              text: '不(N)', onPress: () => {
-                skuRef.current.focus()
-              }, style: 'cancel'
-            },
-            {
               text: '是(Y)',
               onPress: () => {
                 if (project.quantity_min == project.quantity_max) {
@@ -223,6 +217,7 @@ const DifferenceSurveyAdd = (props) => {
                 }
               },
             },
+            { text: '不(N)', onPress: () => skuRef.current.focus() },
           ],
           { cancelable: false },
         );
@@ -393,6 +388,7 @@ const DifferenceSurveyAdd = (props) => {
               placeholder={''}
               onKeyPress={() => { }}
               style={CStyles.InputStyle}
+              maxLength={15}
             />
             <Text style={{ ...CStyles.TextStyle, width: 100, textAlign: 'left' }}>/ 区域:  {pianqu}</Text>
           </View>

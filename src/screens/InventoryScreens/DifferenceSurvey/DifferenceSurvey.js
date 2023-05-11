@@ -8,6 +8,7 @@ import CStyles from '../../../styles/CommonStyles';
 import { DB, tbName, insertDifferenceSurvey } from '../../../hooks/dbHooks';
 import { PROGRAM_NAME } from '../../../constants';
 import { setDiffBia, setDiffCommodity, setDiffPhotos, setMistakes, setScreenLoading } from '../../../reducers/BaseReducer';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const DifferenceSurvey = (props) => {
   const dispatch = useDispatch();
@@ -31,9 +32,15 @@ const DifferenceSurvey = (props) => {
   ]);
   const [diffTypeListOpen, setDiffTypeListOpen] = useState(false);
 
+  const [sortBase, setSortBase] = useState('commodity_code');
+
   useEffect(() => {
     init();
   }, []);
+
+  useEffect(() => {
+    search();
+  }, [category, diffCode, diffType, firstlistData, sortBase]);
 
   const init = async () => {
     DB.transaction((tx) => {
@@ -55,22 +62,17 @@ const DifferenceSurvey = (props) => {
 
     var result = await ApiObject.getCodelist({ qrcode: project.qrcode });
     if (result !== null) {
-      result = await sortData(result);
       setFirstlistData(result);
-      setFlatListData(result);
     }
   };
-
-  useEffect(() => {
-    search();
-  }, [category, diffCode, diffType]);
 
   const search = async () => {
     let tempList = [];
     tempList = await inputCategoryChange();
     tempList = await inputDiffTypeChange(tempList);
     tempList = await inputDiffCodeChange(tempList);
-    setFlatListData(tempList);
+    result = await sortData(tempList);
+    setFlatListData(result);
   }
 
   const inputCategoryChange = () => {
@@ -154,7 +156,35 @@ const DifferenceSurvey = (props) => {
       else if (item.user_id != null && item.user_id == user.id) fourthArray.push(item);
       else if (item.user_id != null && item.user_id != user.id) fifthArray.push(item);
     }
-    var data = firstArray.concat(secondArray, thirdArray, fourthArray, fifthArray);
+    if (sortBase === 'commodity_code') {
+      firstArray.sort((a, b) => a.commodity_code.localeCompare(b.commodity_code));
+      secondArray.sort((a, b) => a.commodity_code.localeCompare(b.commodity_code));
+      thirdArray.sort((a, b) => a.commodity_code.localeCompare(b.commodity_code));
+      fourthArray.sort((a, b) => a.commodity_code.localeCompare(b.commodity_code));
+      fifthArray.sort((a, b) => a.commodity_code.localeCompare(b.commodity_code));
+    }
+    if (sortBase === 'commodity_name') {
+      firstArray.sort((a, b) => (a.commodity_name ?? '').localeCompare(b.commodity_name));
+      secondArray.sort((a, b) => (a.commodity_name ?? '').localeCompare(b.commodity_name));
+      thirdArray.sort((a, b) => (a.commodity_name ?? '').localeCompare(b.commodity_name));
+      fourthArray.sort((a, b) => (a.commodity_name ?? '').localeCompare(b.commodity_name));
+      fifthArray.sort((a, b) => (a.commodity_name ?? '').localeCompare(b.commodity_name));
+    }
+    if (sortBase === 'diff_count') {
+      firstArray.sort((a, b) => a.diff_count - b.diff_count);
+      secondArray.sort((a, b) => a.diff_count - b.diff_count);
+      thirdArray.sort((a, b) => a.diff_count - b.diff_count);
+      fourthArray.sort((a, b) => a.diff_count - b.diff_count);
+      fifthArray.sort((a, b) => a.diff_count - b.diff_count);
+    }
+    if (sortBase === 'diff_amount') {
+      firstArray.sort((a, b) => a.diff_amount - b.diff_amount);
+      secondArray.sort((a, b) => a.diff_amount - b.diff_amount);
+      thirdArray.sort((a, b) => a.diff_amount - b.diff_amount);
+      fourthArray.sort((a, b) => a.diff_amount - b.diff_amount);
+      fifthArray.sort((a, b) => a.diff_amount - b.diff_amount);
+    }
+    var data = fifthArray.concat(fourthArray, thirdArray, secondArray, firstArray);
     return data;
   }
 
@@ -186,9 +216,9 @@ const DifferenceSurvey = (props) => {
     return (
       <View style={styles.container}>
         <Text style={[styles.title, { flex: 2 }]}>{item.commodity_code}</Text>
-        <Text style={[styles.title, { flex: 4 }]}>{item.commodity_name ?? "不在档"}</Text>
-        <Text style={[styles.title, { flex: 1.5 }]}>{item.diff_count}</Text>
-        <Text style={[styles.title, { flex: 1.5 }]}>{item.diff_amount}</Text>
+        <Text style={[styles.title, { flex: 3 }]}>{item.commodity_name ?? "不在档"}</Text>
+        <Text style={[styles.title, { flex: 2 }]}>{item.diff_count}</Text>
+        <Text style={[styles.title, { flex: 2 }]}>{item.diff_amount}</Text>
 
         <View style={[styles.title, { flex: 1 }]}>
           {item.user_id == null && item.diff_user_id == null ? (
@@ -244,13 +274,7 @@ const DifferenceSurvey = (props) => {
 
   return (
     <View style={{ position: 'relative', height: Dimensions.get('screen').height }}>
-      <View>
-        <Header
-          {...props}
-          BtnPress={BackBtnPress}
-          title={'差异调查'}
-        />
-      </View>
+      <Header {...props} BtnPress={BackBtnPress} title={'差异调查'} />
 
       <View style={{ flex: 1 }}>
         <View style={{ justifyContent: 'center', flexDirection: 'row', paddingHorizontal: 20, paddingVertical: 3 }}>
@@ -264,8 +288,8 @@ const DifferenceSurvey = (props) => {
             setValue={setCategory}
             items={categoryList}
             setItems={setCategoryList}
-            searchable={false}
-            listMode='SCROLLVIEW'
+            searchable={true}
+            listMode='MODAL'
           />
 
           <Text style={{ ...CStyles.TextStyle, textAlign: 'right' }}>盈亏:</Text>
@@ -278,8 +302,8 @@ const DifferenceSurvey = (props) => {
             setValue={setDiffType}
             items={diffTypeList}
             setItems={setDiffTypeList}
-            searchable={false}
-            listMode='SCROLLVIEW'
+            searchable={true}
+            listMode='MODAL'
           />
         </View>
 
@@ -305,17 +329,17 @@ const DifferenceSurvey = (props) => {
         </View>
 
         <View style={styles.container}>
-          <Text style={[styles.head, { flex: 2, height: 35 }]}>
-            商品编码
+          <Text style={[styles.head, { flex: 2, height: 35 }]} onPress={() => setSortBase('commodity_code')}>
+            商品编码{sortBase === 'commodity_code' && <Icon name="chevron-down" size={10} color="black" />}
           </Text>
-          <Text style={[styles.head, { flex: 4, height: 35 }]}>
-            商品名称
+          <Text style={[styles.head, { flex: 3, height: 35 }]} onPress={() => setSortBase('commodity_name')}>
+            商品名称{sortBase === 'commodity_name' && <Icon name="chevron-down" size={10} color="black" />}
           </Text>
-          <Text style={[styles.head, { flex: 1.5, height: 35 }]}>
-            差异数量
+          <Text style={[styles.head, { flex: 2, height: 35 }]} onPress={() => setSortBase('diff_count')}>
+            差异数量{sortBase === 'diff_count' && <Icon name="chevron-down" size={10} color="black" />}
           </Text>
-          <Text style={[styles.head, { flex: 1.5, height: 35 }]}>
-            差异金额
+          <Text style={[styles.head, { flex: 2, height: 35 }]} onPress={() => setSortBase('diff_amount')}>
+            差异金额{sortBase === 'diff_amount' && <Icon name="chevron-down" size={10} color="black" />}
           </Text>
           <Text style={[styles.head, { flex: 1, height: 35 }]}>
             运作
@@ -356,6 +380,8 @@ const styles = StyleSheet.create({
     fontSize: 10,
     textAlign: 'center',
     textAlignVertical: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
   },
 
   title: {

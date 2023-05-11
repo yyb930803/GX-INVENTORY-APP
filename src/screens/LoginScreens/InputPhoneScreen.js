@@ -21,9 +21,7 @@ const InputPhoneScreen = (props) => {
       Alert.alert(
         PROGRAM_NAME,
         '请输入电话号码。',
-        [
-          { text: '是(OK)', onPress: () => { } }
-        ],
+        [{ text: '是(OK)', onPress: () => { } }],
         { cancelable: false },
       );
     } else {
@@ -60,9 +58,7 @@ const InputPhoneScreen = (props) => {
       Alert.alert(
         PROGRAM_NAME,
         '验证成功。',
-        [
-          { text: '是(OK)', onPress: () => props.navigation.navigate('ForgotPasswordScreen') }
-        ],
+        [{ text: '是(OK)', onPress: () => props.navigation.navigate('ForgotPasswordScreen') }],
         { cancelable: false },
       );
     }

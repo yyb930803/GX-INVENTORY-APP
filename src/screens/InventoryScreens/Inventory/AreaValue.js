@@ -33,7 +33,7 @@ const AreaValue = (props) => {
       DB.transaction((tx) => {
         tx.executeSql(
           `SELECT * FROM ${gongweiMasterTb} WHERE gongwei = ?`,
-          [parseInt(gongwei)],
+          [Number(gongwei)],
           (tx, results) => {
             if (results.rows.length > 0) {
               gongWeiWorkCheck(results.rows.item(0));
@@ -42,7 +42,6 @@ const AreaValue = (props) => {
                 PROGRAM_NAME,
                 '此工位不存在。 你想继续吗？',
                 [
-                  { text: '否(N)', onPress: () => setGongwei(''), style: 'cancel' },
                   {
                     text: '是(Y)',
                     onPress: async () => {
@@ -50,6 +49,7 @@ const AreaValue = (props) => {
                       setPianqushow(true);
                     },
                   },
+                  { text: '否(N)', onPress: () => setGongwei('') },
                 ],
                 { cancelable: false },
               );
@@ -116,7 +116,7 @@ const AreaValue = (props) => {
         { cancelable: false },
       );
     } else {
-      var result = await ApiObject.newGongweiAdd({qrcode: project.qrcode, pianqu: pianqu, gongwei: parseInt(gongwei)});
+      var result = await ApiObject.newGongweiAdd({qrcode: project.qrcode, pianqu: pianqu, gongwei: Number(gongwei)});
       if (result !== null) {
         DB.transaction((txn) => {
           txn.executeSql(
@@ -124,10 +124,10 @@ const AreaValue = (props) => {
             [
               result.data,
               pianqu,
-              parseInt(gongwei)
+              Number(gongwei)
             ],
             async (txn, results) => {
-              gongWeiWorkCheck({ id: result.data, pianqu: pianqu, gongwei: parseInt(gongwei) });
+              gongWeiWorkCheck({ id: result.data, pianqu: pianqu, gongwei: Number(gongwei) });
               setPianqushow(false);
             },
           );
@@ -225,6 +225,7 @@ const AreaValue = (props) => {
               onKeyPress={gongweiInputChange}
               placeholder={''}
               style={CStyles.InputStyle}
+              maxLength={15}
             />
             <Button
               ButtonTitle={'扫描'}
@@ -319,8 +320,8 @@ const AreaValue = (props) => {
                   setValue={setPianqu}
                   items={pianquList}
                   setItems={setPianquList}
-                  searchable={false}
-                  listMode='SCROLLVIEW'
+                  searchable={true}
+                  listMode='MODAL'
                 />
               </View>
 

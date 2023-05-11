@@ -39,9 +39,7 @@ const PhoneVerifyScreen = (props) => {
       Alert.alert(
         PROGRAM_NAME,
         '验证成功。',
-        [
-          { text: '是(OK)', onPress: () => props.navigation.navigate('Inventory') }
-        ],
+        [{ text: '是(OK)', onPress: () => props.navigation.navigate('Inventory') }],
         { cancelable: false },
       );
     }

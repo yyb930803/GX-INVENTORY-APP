@@ -14,8 +14,8 @@ const SignatureScreen = (props) => {
       PROGRAM_NAME,
       '您要保存并完成电子签名吗？',
       [
-        { text: '否(N)', onPress: () => { } },
         { text: '是(Y)', onPress: () => signRef.current.saveImage() },
+        { text: '否(N)', onPress: () => { } },
       ],
       { cancelable: false },
     );

@@ -23,9 +23,7 @@ const ProjectMainScreen = (props) => {
       Alert.alert(
         PROGRAM_NAME,
         '尚未输入项目QR码。首先，请您使用扫描设备输入项目QR码。',
-        [
-          { text: '是(OK)', onPress: () => { } }
-        ],
+        [{ text: '是(OK)', onPress: () => { } }],
         { cancelable: false },
       );
     } else {
@@ -33,12 +31,8 @@ const ProjectMainScreen = (props) => {
         PROGRAM_NAME,
         '您真的要参加这个项目吗？',
         [
-          {
-            text: "否(N)", onPress: () => {
-              setScanQrcode('');
-            }, style: "cancel"
-          },
-          { text: '是(Y)', onPress: () => { toMasterFile() } }
+          { text: '是(Y)', onPress: () => toMasterFile() },
+          { text: "否(N)", onPress: () => setScanQrcode('') },
         ],
         { cancelable: false },
       );
@@ -48,7 +42,7 @@ const ProjectMainScreen = (props) => {
   const toMasterFile = async () => {
     dispatch(setScreenLoading(true));
 
-    var projectInfo = await ApiObject.getProjectInfo({qrcode: scanQrcode});
+    var projectInfo = await ApiObject.getProjectInfo({ qrcode: scanQrcode });
     if (projectInfo) {
       if (projectInfo.appName == "inventoryApp" + VersionNumber.appVersion) {
         dispatch(setProject(projectInfo));
@@ -57,9 +51,7 @@ const ProjectMainScreen = (props) => {
         Alert.alert(
           PROGRAM_NAME,
           '应用程序版本不匹配。 请下载该应用以继续。',
-          [
-            { text: "OK", onPress: () => { }, style: "cancel" },
-          ],
+          [{ text: "OK", onPress: () => { } }],
           { cancelable: false },
         );
       }

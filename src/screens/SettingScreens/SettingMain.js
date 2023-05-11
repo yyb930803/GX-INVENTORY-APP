@@ -27,13 +27,8 @@ const SettingMain = (props) => {
       PROGRAM_NAME,
       '你真的退出了吗？',
       [
-        { text: '否(N)', onPress: () => { }, style: 'cancel' },
-        {
-          text: '是(Y)',
-          onPress: () => {
-            signOut();
-          },
-        },
+        { text: '是(Y)', onPress: () => signOut() },
+        { text: '否(N)', onPress: () => { } },
       ],
       { cancelable: true },
     );

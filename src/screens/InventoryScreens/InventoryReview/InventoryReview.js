@@ -26,7 +26,7 @@ const InventoryReview = (props) => {
       DB.transaction((tx) => {
         tx.executeSql(
           `SELECT * FROM ${gongweiMasterTb} WHERE gongwei = ?`,
-          [parseInt(gongwei)],
+          [Number(gongwei)],
           (tx, results) => {
             if (results.rows.length > 0) {
               gongWeiWorkCheck(results.rows.item(0));
@@ -68,7 +68,7 @@ const InventoryReview = (props) => {
         await gotoInventoryMain(gongweiItem);
       }
     }
-    
+
     dispatch(setScreenLoading(false));
   };
 
@@ -185,13 +185,7 @@ const InventoryReview = (props) => {
         setOpenScan(false);
       }} skuScanCancel={() => setOpenScan(false)} />}
       <View style={{ position: 'relative', height: Dimensions.get('window').height }}>
-        <View style={{}}>
-          <Header
-            {...props}
-            BtnPress={BackBtnPress}
-            title={'盘点复查'}
-          />
-        </View>
+        <Header {...props} BtnPress={BackBtnPress} title={'盘点复查'} />
 
         <View style={{ flex: 1, position: 'relative' }}>
           <View style={{ justifyContent: 'center', flexDirection: 'row', paddingHorizontal: 30, paddingVertical: 10 }}>
@@ -204,6 +198,7 @@ const InventoryReview = (props) => {
               onKeyPress={gongweiInputChange}
               placeholder={''}
               style={CStyles.InputStyle}
+              maxLength={15}
             />
             <Button
               ButtonTitle={'扫描'}

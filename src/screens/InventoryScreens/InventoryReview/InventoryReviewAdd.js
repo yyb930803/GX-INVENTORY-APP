@@ -106,7 +106,7 @@ const InventoryReviewAdd = (props) => {
           if (column == null) {
             column = 1;
           } else {
-            column = parseInt(column) + 1;
+            column = Number(column) + 1;
           }
           setColumn(column);
         },
@@ -152,17 +152,13 @@ const InventoryReviewAdd = (props) => {
           PROGRAM_NAME,
           '输入的数量超出设置范围。 是否要输入超出设置范围的数量？',
           [
+            { text: '是(Y)', onPress: () => setQuantityClose(false) },
             {
               text: '不(N)',
               onPress: () => {
                 setCount('');
                 countRef.current.focus();
               },
-              style: 'cancel'
-            },
-            {
-              text: '是(Y)',
-              onPress: () => setQuantityClose(false),
             },
           ],
           { cancelable: false },
@@ -219,11 +215,6 @@ const InventoryReviewAdd = (props) => {
           '条形码不存在',
           [
             {
-              text: '不(N)', onPress: () => {
-                skuRef.current.focus()
-              }, style: 'cancel'
-            },
-            {
               text: '是(Y)',
               onPress: () => {
                 if (project.quantity_min == project.quantity_max) {
@@ -232,6 +223,7 @@ const InventoryReviewAdd = (props) => {
                 }
               },
             },
+            { text: '不(N)', onPress: () => skuRef.current.focus() },
           ],
           { cancelable: false },
         );
@@ -269,8 +261,9 @@ const InventoryReviewAdd = (props) => {
           "mistakes_id",
           "mistakes_type",
           "delete_flag",
-          "record_id"
-          ) VALUES (?,?,?,?,?,?,?, "new",?,?,?,?,?,?)`,
+          "record_id",
+          "commodity_name"
+          ) VALUES (?,?,?,?,?,?,?,"new",?,?,?,?,?,?,?)`,
         [
           commoditySku,
           pipeiItem.commodity_price ?? 0,
@@ -284,7 +277,8 @@ const InventoryReviewAdd = (props) => {
           mistake,
           ownIssues,
           0,
-          uuid.v4()
+          uuid.v4(),
+          pipeiItem.commodity_name ?? '',
         ],
         (tx, results) => {
           skuRef.current.focus();
@@ -361,8 +355,8 @@ const InventoryReviewAdd = (props) => {
           setValue={setMistake}
           items={mistakeList}
           setItems={setMistakeList}
-          searchable={false}
-          listMode='SCROLLVIEW'
+          searchable={true}
+          listMode='MODAL'
         />
       </View>
     </>

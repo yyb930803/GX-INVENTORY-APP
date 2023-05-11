@@ -75,17 +75,13 @@ const InventoryMain = (props) => {
           PROGRAM_NAME,
           '输入的数量超出设置范围。 是否要输入超出设置范围的数量？',
           [
+            { text: '是(Y)', onPress: () => setQuantityClose(false) },
             {
               text: '不(N)',
               onPress: () => {
                 setCount('');
                 countRef.current.focus();
               },
-              style: 'cancel'
-            },
-            {
-              text: '是(Y)',
-              onPress: () => setQuantityClose(false),
             },
           ],
           { cancelable: false },
@@ -137,26 +133,15 @@ const InventoryMain = (props) => {
       if (result !== null) {
         setPipeiItem(result);
         if (project.quantity_min == project.quantity_max) {
-          insertRowConfirm();
+          insertRowConfirm(result);
         }
       } else {
         Alert.alert(
           PROGRAM_NAME,
           '条形码不存在',
           [
-            {
-              text: '不(N)', onPress: () => {
-                skuRef.current.focus()
-              }, style: 'cancel'
-            },
-            {
-              text: '是(Y)',
-              onPress: () => {
-                if (project.quantity_min == project.quantity_max) {
-                  insertRowConfirm();
-                }
-              },
-            },
+            { text: '是(Y)', onPress: () => project.quantity_min == project.quantity_max && insertRowConfirm() },
+            { text: '不(N)', onPress: () => skuRef.current.focus() },
           ],
           { cancelable: false },
         );
@@ -164,7 +149,7 @@ const InventoryMain = (props) => {
     }
   }
 
-  const insertRowConfirm = () => {
+  const insertRowConfirm = (pipeiItemVal = pipeiItem) => {
     if (Number(count) === 0 || count === '') {
       Alert.alert(
         PROGRAM_NAME,
@@ -173,18 +158,19 @@ const InventoryMain = (props) => {
         { cancelable: false },
       );
     } else {
-      insertRow();
+      insertRow(pipeiItemVal);
       skuRef.current.focus();
       maxSkuCountCheck();
     }
   }
 
-  const insertRow = () => {
+  const insertRow = (pipeiItemVal) => {
     var date = new Date();
     var scantime =
       [date.getFullYear(), date.getMonth() + 1, date.getDate()].join('-') +
       ' ' +
       [date.getHours(), date.getMinutes(), date.getSeconds()].join(':');
+
     DB.transaction((txn) => {
       txn.executeSql(
         `INSERT INTO ${scandataTb} (
@@ -213,9 +199,9 @@ const InventoryMain = (props) => {
           uuid.v4(),
           scantime,
           gongweiPos.id,
-          pipeiItem?.commodity_price,
+          pipeiItemVal?.commodity_price,
           "new",
-          pipeiItem?.commodity_name
+          pipeiItemVal?.commodity_name
         ],
         (txn, results) => {
           setPipeiItem(null);
@@ -237,9 +223,7 @@ const InventoryMain = (props) => {
       Alert.alert(
         PROGRAM_NAME,
         '您已经对' + skuCount + '个SKU进行了盘点。 您想继续吗？',
-        [
-          { text: 'OK', onPress: () => { }, style: 'cancel' },
-        ],
+        [{ text: 'OK', onPress: () => { } }],
         { cancelable: false },
       );
     }

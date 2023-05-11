@@ -35,9 +35,7 @@ const Login = (props) => {
       Alert.alert(
         PROGRAM_NAME,
         '登录成功。',
-        [
-          { text: '是(OK)', onPress: () => { props.navigation.navigate('Management'); } }
-        ],
+        [{ text: '是(OK)', onPress: () => props.navigation.navigate('Management') }],
         { cancelable: false },
       );
     }
@@ -103,9 +101,7 @@ const Login = (props) => {
             Alert.alert(
               PROGRAM_NAME,
               '请输入电子邮件和密码',
-              [
-                { text: 'OK', onPress: () => { } }
-              ],
+              [{ text: 'OK', onPress: () => { } }],
               { cancelable: false },
             );
           }} type={"disable"} />

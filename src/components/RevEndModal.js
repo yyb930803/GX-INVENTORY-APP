@@ -23,8 +23,6 @@ const RevEndModal = (props) => {
         } else {
             await toNextGongWeiConfirm();
         }
-
-        dispatch(setScreenLoading(false));
     };
 
     const uploadData = async (data) => {
@@ -33,8 +31,8 @@ const RevEndModal = (props) => {
         if (result !== null) {
             DB.transaction((tx) => {
                 tx.executeSql(
-                    `UPDATE ${inventoryReviewTb} SET upload = "uploaded" where gongwei_id=?`,
-                    [gongwei_id],
+                    `UPDATE ${inventoryReviewTb} SET upload = "uploaded" WHERE gongwei_id = ?`,
+                    [gongweiPos.id],
                     (tx, results) => {
                         toNextGongWeiConfirm();
                     },
@@ -49,6 +47,7 @@ const RevEndModal = (props) => {
         await ApiObject.gongweiEndUpdate({ qrcode: project.qrcode });
         dispatch(await setGongweiPos({}));
         await ApiObject.endInspection({ qrcode: project.qrcode, gongwei_id: gongweiPos.id });
+        dispatch(setScreenLoading(false));
         props.navigation.push('InventoryReview');
     };
 

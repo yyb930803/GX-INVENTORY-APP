@@ -106,7 +106,8 @@ const UserInfo = (props) => {
         '是否保存更改的信息？',
         [
           {
-            text: 'YES', onPress: async () => {
+            text: 'YES',
+            onPress: async () => {
               await accountSave();
               props.navigation.push('SettingMain');
             }

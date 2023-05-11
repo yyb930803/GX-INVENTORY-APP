@@ -53,8 +53,8 @@ class Api {
                     PROGRAM_NAME,
                     responseJson.message ?? 'Error!!',
                     [
-                      { text: '不(N)', onPress: () => resolve() },
                       { text: '是(Y)', onPress: () => { result = 'reApiForce'; resolve(); } },
+                      { text: '不(N)', onPress: () => resolve() },
                     ],
                     { cancelable: false },
                   );
