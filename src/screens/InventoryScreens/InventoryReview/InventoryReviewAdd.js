@@ -217,8 +217,8 @@ const InventoryReviewAdd = (props) => {
             {
               text: '是(Y)',
               onPress: () => {
+                setPipeiStatus(true);
                 if (project.quantity_min == project.quantity_max) {
-                  setPipeiStatus(true);
                   rowRef.current.focus();
                 }
               },
